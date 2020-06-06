@@ -10,12 +10,15 @@ const outputPath = path.join(OUTPUT_DIR, 'team.html');
 
 const render = require('./lib/htmlRenderer');
 
+//* Blank array to be filled in with pushed constructors classes.
 const teamMembersArray = [];
 
+//* Introduction Question to open the applicaiton
 const cliIntroQuestion = {
 	type: 'list',
 	message: `
         Welcome to the Team Profile Generator Application. 
+
         This program will allow the user to create an HTML based team profile display that will outline the team members as well as some brief information on each team member. 
         
         The user will be prompted to submit information on the team manager as well as select how many team members other than the manager are in the team. 
@@ -26,6 +29,7 @@ const cliIntroQuestion = {
 	name: 'cliIntroQ',
 };
 
+//* Questions to be answered to fill in the manager constructor
 const managerQuestions = [
 	{
 		type: 'input',
@@ -49,6 +53,7 @@ const managerQuestions = [
 	},
 ];
 
+//* questions that prompts the user if they want to add another team member.
 const endManagerQuestions = {
 	type: 'list',
 	message: 'Would you like to add another team member to this team? Select Yes to add an Engineer or Intern team member or select No if no additional team members need to be added.',
@@ -56,6 +61,7 @@ const endManagerQuestions = {
 	name: 'teamSize',
 };
 
+//* Question to ask which role the new team member should be mapped to.
 const teamMemberRolePick = {
 	type: 'list',
 	message: 'Is this team member an Engineer or an Intern?',
@@ -63,6 +69,7 @@ const teamMemberRolePick = {
 	name: 'teamMemberRoleType',
 };
 
+//* Questions for the engineer profile
 const engineerQuestions = [
 	{
 		type: 'input',
@@ -86,6 +93,7 @@ const engineerQuestions = [
 	},
 ];
 
+//* Questions for the intern profile
 const internQuestions = [
 	{
 		type: 'input',
@@ -109,6 +117,7 @@ const internQuestions = [
 	},
 ];
 
+//* Initial function that asks if the user wants to build the team and prints the introduction message. If they select Yes, then they will be instructed to fill in the manager's information for the next function call of managerInfo() as there can only be one manager for this profile page
 function cliIntro() {
 	inquirer.prompt(cliIntroQuestion).then((appStart) => {
 		if (appStart.cliIntroQ === 'Yes, Start Building Team') {
@@ -129,6 +138,7 @@ function managerInfo() {
 		let manager = new Manager(managerBuild.managerName, managerBuild.managerId, managerBuild.manageEmail, managerBuild.managerOfficeNumber);
 		teamMembersArray.push(manager);
 		console.log(teamMembersArray);
+		//* Since there is only one manager class to be built, the teamSizeinfo function is then called to start building the individual team members
 		teamSizeInfo();
 	});
 }
@@ -136,11 +146,14 @@ function managerInfo() {
 //* Function to determine the size of the team with additional engineers or interns
 function teamSizeInfo() {
 	inquirer.prompt(endManagerQuestions).then((teamSize) => {
+		//* By choosing yes, you can add another team member to the array. This re-cals the teamMemberloop funciton which goes throught the questions to add a new team member to the array
 		if (teamSize.teamSize === 'Yes') {
 			teamMemberLoop();
 		}
 		if (teamSize.teamSize === 'No') {
+			//* If no more members need to be added, then the application is ended by choosing No and then the file is written to the HTML template
 			console.log(`All Team Members Have Been Added. Writing HTML Team Profile Page.`);
+			//! Add Write to File Function Here
 		}
 	});
 }
@@ -168,4 +181,5 @@ function teamMemberLoop() {
 	});
 }
 
+//* Calls cliIntro function to start the CLI Application.
 cliIntro();
