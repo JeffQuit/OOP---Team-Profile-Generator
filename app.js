@@ -10,6 +10,8 @@ const outputPath = path.join(OUTPUT_DIR, 'team.html');
 
 const render = require('./lib/htmlRenderer');
 
+const teamMembersArray = [];
+
 const cliIntroQuestion = {
 	type: 'list',
 	message: `
@@ -103,7 +105,7 @@ const internQuestions = [
 	{
 		type: 'input',
 		message: "What is this Intern's School/University?",
-		name: 'internGithub',
+		name: 'internSchool',
 	},
 ];
 
@@ -121,11 +123,12 @@ function cliIntro() {
 //* Function to build the team manager and then call the function to start building the team size
 function managerInfo() {
 	inquirer.prompt(managerQuestions).then((managerBuild) => {
-		let { managerName, managerId, manageEmail, managerOfficeNumber } = managerBuild;
 		console.log('---------------------');
 		console.log(managerBuild);
 		console.log('---------------------');
-
+		let manager = new Manager(managerBuild.managerName, managerBuild.managerId, managerBuild.manageEmail, managerBuild.managerOfficeNumber);
+		teamMembersArray.push(manager);
+		console.log(teamMembersArray);
 		teamSizeInfo();
 	});
 }
@@ -137,7 +140,7 @@ function teamSizeInfo() {
 			teamMemberLoop();
 		}
 		if (teamSize.teamSize === 'No') {
-			//!Call Function to end program
+			console.log(`All Team Members Have Been Added. Writing HTML Team Profile Page.`);
 		}
 	});
 }
@@ -148,11 +151,17 @@ function teamMemberLoop() {
 		if (teamrole.teamMemberRoleType === 'Engineer') {
 			console.log('Please Submit Engineer Profile Information');
 			inquirer.prompt(engineerQuestions).then((engineerBuild) => {
+				let engineer = new Engineer(engineerBuild.enginnerName, engineerBuild.engineerId, engineerBuild.engineerEmail, engineerBuild.engineerGithub);
+				teamMembersArray.push(engineer);
+				console.log(teamMembersArray);
 				teamSizeInfo();
 			});
 		} else if (teamrole.teamMemberRoleType === 'Intern') {
 			console.log('Please Submit Intern Profile Information');
 			inquirer.prompt(internQuestions).then((internBuild) => {
+				let intern = new Intern(internBuild.internName, internBuild.internId, internBuild.internEmail, internBuild.internSchool);
+				teamMembersArray.push(intern);
+				console.log(teamMembersArray);
 				teamSizeInfo();
 			});
 		}
