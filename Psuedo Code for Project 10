@@ -144,3 +144,7 @@ Need to fil in the files in the LIB folder
 
 5. Once all cards are completed, bounces information to the HTML page/ends CLI and prints success message. 
 
+
+Problems:
+4d - Cannot get it to loop through questions using a loop as it asks the same question i amount of times. 
+Solution to 4d - Instead, go with another function to ask if the user wants to add another team member and brings them back to the section to choose between intern/engineer and then creates a new constructor class for each new input. If they choose no, then the program ends 
