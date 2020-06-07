@@ -187,19 +187,16 @@ function teamMemberLoop() {
 
 //* Function to write array information to HTML templates when no more team members are added to the application.
 
-function renderHTML(file) {
+async function renderHTML(file) {
 	const htmlProfilePage = render(file);
 	console.log(htmlProfilePage);
-}
 
-/*
-function generateHTMLFile(outputPath, page) {
-	writeFileAsync(outputPath, page).then(function () {
+	await writeFileAsync(outputPath, htmlProfilePage).then(function () {
 		log.red(`
         Team Profile Completed.
-    `);
+        `);
 	});
-}*/
+}
 
 //* Calls cliIntro function to start the CLI Application.
 cliIntro();
