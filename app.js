@@ -3,12 +3,17 @@ const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const inquirer = require('inquirer');
 const path = require('path');
+const util = require('util');
 const fs = require('fs');
+const Logger = require('./logger');
+const writeFileAsync = util.promisify(fs.writeFile);
 
 const OUTPUT_DIR = path.resolve(__dirname, 'output');
 const outputPath = path.join(OUTPUT_DIR, 'team.html');
 
 const render = require('./lib/htmlRenderer');
+
+const log = new Logger();
 
 //* Blank array to be filled in with pushed constructors classes.
 const teamMembersArray = [];
@@ -152,8 +157,7 @@ function teamSizeInfo() {
 		}
 		if (teamSize.teamSize === 'No') {
 			//* If no more members need to be added, then the application is ended by choosing No and then the file is written to the HTML template
-			console.log(`All Team Members Have Been Added. Writing HTML Team Profile Page.`);
-			//! Add Write to File Function Here
+			renderHTML(teamMembersArray);
 		}
 	});
 }
@@ -180,6 +184,22 @@ function teamMemberLoop() {
 		}
 	});
 }
+
+//* Function to write array information to HTML templates when no more team members are added to the application.
+
+function renderHTML(file) {
+	const htmlProfilePage = render(file);
+	console.log(htmlProfilePage);
+}
+
+/*
+function generateHTMLFile(outputPath, page) {
+	writeFileAsync(outputPath, page).then(function () {
+		log.red(`
+        Team Profile Completed.
+    `);
+	});
+}*/
 
 //* Calls cliIntro function to start the CLI Application.
 cliIntro();
