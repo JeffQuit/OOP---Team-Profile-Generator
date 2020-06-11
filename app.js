@@ -45,11 +45,33 @@ const managerQuestions = [
 		type: 'input',
 		message: "What is the Manager's ID number?",
 		name: 'managerId',
+		validate: function (num) {
+			numbers = /^[0-9]+$/.test(num);
+
+			if (numbers) {
+				log.green(`        ----------Number Formatting Accepted----------`);
+				return true;
+			} else {
+				log.red(`        ----------Please enter a valid ID Number that does not include anything other than numbers (No letters or symbols)----------`);
+				return false;
+			}
+		},
 	},
 	{
 		type: 'input',
 		message: "What is the Manager's email?",
 		name: 'manageEmail',
+		validate: function (emailInput) {
+			emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput);
+
+			if (emailFormat) {
+				log.green(`        ----------Email Formatting Accepted----------`);
+				return true;
+			} else {
+				log.red(`        ----------Please enter a valid email----------`);
+				return false;
+			}
+		},
 	},
 	{
 		type: 'input',
@@ -85,11 +107,33 @@ const engineerQuestions = [
 		type: 'input',
 		message: "What is this Engineer's ID number?",
 		name: 'engineerId',
+		validate: function (num) {
+			numbers = /^[0-9]+$/.test(num);
+
+			if (numbers) {
+				log.green(`        ----------Number Formatting Accepted----------`);
+				return true;
+			} else {
+				log.red(`        ----------Please enter a valid ID Number that does not include anything other than numbers (No letters or symbols)----------`);
+				return false;
+			}
+		},
 	},
 	{
 		type: 'input',
 		message: "What is this Engineer's email?",
 		name: 'engineerEmail',
+		validate: function (emailInput) {
+			emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput);
+
+			if (emailFormat) {
+				log.green(`        ----------Email Formatting Accepted----------`);
+				return true;
+			} else {
+				log.red(`        ----------Please enter a valid email----------`);
+				return false;
+			}
+		},
 	},
 	{
 		type: 'input',
@@ -109,11 +153,33 @@ const internQuestions = [
 		type: 'input',
 		message: "What is this Intern's ID number?",
 		name: 'internId',
+		validate: function (num) {
+			numbers = /^[0-9]+$/.test(num);
+
+			if (numbers) {
+				log.green(`        ----------Number Formatting Accepted----------`);
+				return true;
+			} else {
+				log.red(`        ----------Please enter a valid ID Number that does not include anything other than numbers (No letters or symbols)----------`);
+				return false;
+			}
+		},
 	},
 	{
 		type: 'input',
 		message: "What is this Intern's email?",
 		name: 'internEmail',
+		validate: function (emailInput) {
+			emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput);
+
+			if (emailFormat) {
+				log.green(`        ----------Email Formatting Accepted----------`);
+				return true;
+			} else {
+				log.red(`        ----------Please enter a valid email----------`);
+				return false;
+			}
+		},
 	},
 	{
 		type: 'input',
@@ -126,10 +192,14 @@ const internQuestions = [
 function cliIntro() {
 	inquirer.prompt(cliIntroQuestion).then((appStart) => {
 		if (appStart.cliIntroQ === 'Yes, Start Building Team') {
-			console.log('Please Submit Manager Profile Information');
+			log.green('Please Submit Manager Profile Information');
 			managerInfo();
 		} else {
-			console.log('Application Closed');
+			log.yellow(`
+        ------------------------------------------------------------
+        ---------------------Application Closed---------------------
+        ------------------------------------------------------------
+            `);
 		}
 	});
 }
@@ -137,12 +207,8 @@ function cliIntro() {
 //* Function to build the team manager and then call the function to start building the team size
 function managerInfo() {
 	inquirer.prompt(managerQuestions).then((managerBuild) => {
-		console.log('---------------------');
-		console.log(managerBuild);
-		console.log('---------------------');
 		let manager = new Manager(managerBuild.managerName, managerBuild.managerId, managerBuild.manageEmail, managerBuild.managerOfficeNumber);
 		teamMembersArray.push(manager);
-		console.log(teamMembersArray);
 		//* Since there is only one manager class to be built, the teamSizeinfo function is then called to start building the individual team members
 		teamSizeInfo();
 	});
@@ -166,34 +232,33 @@ function teamSizeInfo() {
 function teamMemberLoop() {
 	inquirer.prompt(teamMemberRolePick).then((teamrole) => {
 		if (teamrole.teamMemberRoleType === 'Engineer') {
-			console.log('Please Submit Engineer Profile Information');
+			log.blue('Please Submit Engineer Profile Information');
 			inquirer.prompt(engineerQuestions).then((engineerBuild) => {
 				let engineer = new Engineer(engineerBuild.enginnerName, engineerBuild.engineerId, engineerBuild.engineerEmail, engineerBuild.engineerGithub);
 				teamMembersArray.push(engineer);
-				console.log(teamMembersArray);
 				teamSizeInfo();
 			});
 		} else if (teamrole.teamMemberRoleType === 'Intern') {
-			console.log('Please Submit Intern Profile Information');
+			log.magenta('Please Submit Intern Profile Information');
 			inquirer.prompt(internQuestions).then((internBuild) => {
 				let intern = new Intern(internBuild.internName, internBuild.internId, internBuild.internEmail, internBuild.internSchool);
 				teamMembersArray.push(intern);
-				console.log(teamMembersArray);
 				teamSizeInfo();
 			});
 		}
 	});
 }
 
-//* Function to write array information to HTML templates when no more team members are added to the application.
+//* Function to write array information to HTML templates when no more team members are added to the application. Uses Async Await function formatting to ensure that the write file is done after the rendering of the HTML from the array is completed.
 
 async function renderHTML(file) {
 	const htmlProfilePage = render(file);
-	console.log(htmlProfilePage);
 
 	await writeFileAsync(outputPath, htmlProfilePage).then(function () {
-		log.red(`
-        Team Profile Completed.
+		log.green(`
+        ----------------------------------------------------------------
+        ---------------------Team Profile Completed---------------------
+        ----------------------------------------------------------------
         `);
 	});
 }
