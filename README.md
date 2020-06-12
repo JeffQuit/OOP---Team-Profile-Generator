@@ -50,8 +50,8 @@ your website to display your team profiles.
 ## Credits
 
 This application was completed by Jeff Quittman as a project for UCLA/Trilogy's Full Stack Software Development Bootcamp. Dependencies for this project include the node modules: Inquirer - for
-creating question prompts in the CLI, util - for creating the promisify'ed writeFilyAsync methods, Jest- for testing the class constructor tests. The color-coding console log message feature was
-borrowed from the logger activity found in the OOP week activity folder.
+creating question prompts in the CLI, util - for creating the promisify'ed writeFilyAsync methods, Jest- for testing the class constructor tests. Path - for determining the path of the output file.
+The color-coding console log message feature was borrowed from the logger activity found in the OOP week activity folder.
 
 ## License
 
